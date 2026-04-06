@@ -4,6 +4,7 @@ import tempfile
 
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.responses import FileResponse, Response
+from fastapi.responses import RedirectResponse
 
 from app.inference_service import InferenceService
 
@@ -80,3 +81,8 @@ async def predict_visualized(file: UploadFile = File(...)):
 
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
+        
+
+@app.get("/")
+def root():
+    return RedirectResponse(url="/docs")
