@@ -121,6 +121,3 @@ Next planned steps:
 ## Author
 
 Fazal Kadri
-
-```
-```

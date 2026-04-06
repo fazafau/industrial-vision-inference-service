@@ -16,3 +16,6 @@ requirements_locked.txt
 
 
 models/model_final_clean.pth
+sample_inputs/
+
+app/obsolete/run_local_inference_old.py
