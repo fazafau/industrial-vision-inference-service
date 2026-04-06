@@ -1,4 +1,4 @@
-````markdown
+
 # Industrial Vision Inference Service
 
 A deployment-oriented computer vision inference pipeline for industrial control-cabinet images, built from my master’s thesis work.
