@@ -1,0 +1,14 @@
+.venvironment
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.git
+.gitignore
+.vscode
+.vs
+.idea
+outputs
+sample_inputs
+requirements_locked.txt
+README.md
