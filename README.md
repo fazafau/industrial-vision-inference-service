@@ -5,6 +5,44 @@ A deployment-oriented computer vision inference pipeline for industrial control-
 
 This project loads a trained Detectron2 object detection model, runs inference on industrial panel images, applies OCR on detected components, and exposes the pipeline through both a local CLI workflow and a FastAPI-based backend service. The service can return structured JSON predictions as well as annotated visualization images, and the full application has been containerized with Docker for reproducible local deployment.
 
+```mermaid
+flowchart TD
+    A[Input Image] --> B[CLI or FastAPI Request]
+
+    B --> C[Load Detectron2 Config]
+    C --> D[Load Trained Checkpoint]
+    D --> E[Preprocess Image]
+    E --> F[Object Detection Inference]
+
+    F --> G[Detected Bounding Boxes and Classes]
+    G --> H[Crop Detected Components]
+    H --> I[Run PaddleOCR on Crops]
+    I --> J[Regex-Based Label Extraction]
+
+    J --> K[Structured Output Assembly]
+    K --> L[JSON Response]
+    K --> M[Annotated Visualization Image]
+    K --> N[Saved Detection Crops]
+
+    subgraph Interfaces
+        B1[CLI: run_local_inference.py]
+        B2[FastAPI: /predict]
+        B3[FastAPI: /predict-visualized]
+    end
+
+    B1 --> B
+    B2 --> B
+    B3 --> B
+
+    subgraph Deployment
+        O[FastAPI App]
+        P[Docker Container]
+    end
+
+    O --> P
+    B2 --> O
+    B3 --> O
+```
 ## Features
 
 - Object detection on industrial electrical/control-cabinet images
