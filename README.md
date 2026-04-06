@@ -6,38 +6,42 @@ A deployment-oriented computer vision inference pipeline for industrial control-
 This project loads a trained Detectron2 object detection model, runs inference on industrial panel images, applies OCR on detected components, and exposes the pipeline through both a local CLI workflow and a FastAPI-based backend service. The service can return structured JSON predictions as well as annotated visualization images, and the full application has been containerized with Docker for reproducible local deployment.
 
 ```mermaid
-flowchart LR
-    A[Input Image] --> B[Inference Interface]
+flowchart TD
+    A[Input Image] --> B[CLI or FastAPI Request]
 
-    subgraph Interface Layer
-        B1[CLI]
-        B2[FastAPI API]
+    B --> C[Load Detectron2 Config]
+    C --> D[Load Trained Checkpoint]
+    D --> E[Preprocess Image]
+    E --> F[Object Detection Inference]
+
+    F --> G[Detected Bounding Boxes and Classes]
+    G --> H[Crop Detected Components]
+    H --> I[Run PaddleOCR on Crops]
+    I --> J[Regex-Based Label Extraction]
+
+    J --> K[Structured Output Assembly]
+    K --> L[JSON Response]
+    K --> M[Annotated Visualization Image]
+    K --> N[Saved Detection Crops]
+
+    subgraph Interfaces
+        B1[CLI: run_local_inference.py]
+        B2[FastAPI: /predict]
+        B3[FastAPI: /predict-visualized]
     end
 
-    B --> C[Inference Service]
     B1 --> B
     B2 --> B
+    B3 --> B
 
-    subgraph Core Pipeline
-        C --> D[Load Model Config and Weights]
-        D --> E[Image Preprocessing]
-        E --> F[Detectron2 Object Detection]
-        F --> G[Component Cropping]
-        G --> H[PaddleOCR]
-        H --> I[Regex-Based Postprocessing]
+    subgraph Deployment
+        O[FastAPI App]
+        P[Docker Container]
     end
 
-    I --> J[Structured JSON Output]
-    I --> K[Visualization Image]
-    I --> L[Detection Crops]
-
-    subgraph Deployment Layer
-        M[FastAPI Backend]
-        N[Docker Container]
-    end
-
-    B2 --> M
-    M --> N
+    O --> P
+    B2 --> O
+    B3 --> O
 ```
 ## Features
 
